@@ -44,7 +44,37 @@ def merge_sort(nums):
             k += 1
 
 
+def merge_sortII(nums):
+    if len(nums) == 1:
+        return nums
+    mid = len(nums) // 2
+    left_half = nums[0:mid]
+    right_half = nums[mid:]
+    return merge(merge_sortII(left_half), merge_sortII(right_half))
+
+
+def merge(nums1, nums2):
+    res = []
+    i, j = 0, 0
+    while i < len(nums1) and j < len(nums2):
+        if nums1[i] < nums2[j]:
+            res.append(nums1[i])
+            i += 1
+        else:
+            res.append(nums2[j])
+            j += 1
+    while i < len(nums1):
+        res.append(nums1[i])
+        i += 1
+    while j < len(nums2):
+        res.append(nums2[j])
+        j += 1
+    return res
+
+
 if __name__ == "__main__":
-    nums = [3,1,4,6,7,8,2,0]
-    merge_sort(nums)
-    print(nums)
+    nums1 = [3,1,4,6,7,8,2,0]
+    merge_sort(nums1)
+    print(nums1)
+    nums2 = [3,1,4,6,7,8,2,0]
+    print(merge_sortII(nums2))
