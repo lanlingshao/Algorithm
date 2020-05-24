@@ -4,33 +4,63 @@
 """
 
 
-class Solution1:
+class Solution:
     def find_n_gon_position(self, arr, k):
         res = []
         len_arr = self.find_len(arr)
-        avg_len = sum(len_arr) / k
-        print(avg_len)
+        avg_len = sum(len_arr[:-1]) / k
+        # 考虑分点在最后一条边上的边界条件
+        arr.append(arr[0])
 
         last_length = 0
         for i in range(1, len(arr)):
-            cur_length = arr[i - 1] + last_length
+            cur_length = len_arr[i - 1] + last_length
             if cur_length > avg_len:
-                pass
-            else:
+                last_length = cur_length - avg_len
+                direction = self.find_direction(i, arr)
+                if direction == 'up':
+                    res.append([arr[i][0], arr[i][1] - last_length])
+                elif direction == 'down':
+                    res.append([arr[i][0], arr[i][1] + last_length])
+                elif direction == 'right':
+                    res.append([arr[i][0] - last_length, arr[i][1]])
+                else:
+                    res.append([arr[i][0] + last_length, arr[i][1]])
+
+                # 一条边上不止一个分点的时候
+                while last_length >= avg_len:
+                    cur_length = cur_length - avg_len
+                    last_length = cur_length - avg_len
+                    if direction == 'up':
+                        res.append([arr[i][0], arr[i][1] - last_length])
+                    elif direction == 'down':
+                        res.append([arr[i][0], arr[i][1] + last_length])
+                    elif direction == 'right':
+                        res.append([arr[i][0] - last_length, arr[i][1]])
+                    else:
+                        res.append([arr[i][0] + last_length, arr[i][1]])
+            elif cur_length < avg_len:
                 last_length = cur_length
-
-
-
-
+            else:
+                res.append(arr[i])
+                last_length = 0
 
         return res
 
     def find_direction(self, i, arr):
         cur_postion = arr[i]
         last_postion = arr[i - 1]
-        if cur_postion[0] == last_postion[0] and cur_postion[1] > last_postion:
-            cur_position = 'north'
-        elif cur_postion[1]
+        if cur_postion[0] == last_postion[0]:
+            if cur_postion[1] > last_postion[0]:
+                direction = 'up'
+            else:
+                direction = 'down'
+        else:
+            if cur_postion[0] > last_postion[0]:
+                direction = 'right'
+            else:
+                direction = 'left'
+        return direction
 
     def find_len(self, arr):
         len_arr = []
@@ -42,52 +72,9 @@ class Solution1:
                 len_arr.append(abs(cur_point[1] - next_point[1]))
             else:
                 len_arr.append(abs(cur_point[0] - next_point[0]))
-        print(len_arr)
+        # 考虑分点在最后一条边上的边界条件
+        len_arr.append(len_arr[0])
         return len_arr
-
-
-class Solution:
-    def find_position(self,arr,k):
-        res = []
-        arr_len = self.find_len(arr)  # relative array with the length of edges
-        average_len = sum(arr_len[:-1])/k # average length of ploygon basing on k(delete last one)
-        last_len = 0 #record the length of last edges when find the target points
-        arr += [arr[0]] #put the first on the last to do iteration(help we judge the last edge)
-        for i in range(1,len(arr)):#go through all points of polygon
-            current_len = arr_len[i-1] +last_len #when we come to new edge, the length equals to last + itself
-            a,b = divmod(current_len,average_len) # divmod to find quotient and remainder
-            a= int(a) # avoid of decimal
-            if a >0:#mean target point is on this edge
-                x_tend = arr[i][0] - arr[i-1][0]
-                y_tend = arr[i][1] - arr[i-1][1]
-                if x_tend ==0:#target point has same x with arr[i]
-                    y_gain = y_tend/abs(y_tend)#the direction of y(up or down)
-                    for j in range(1,a+1):#mean several target points are on this edge
-                        gain = j*average_len - last_len
-                        point = [arr[i-1][0],arr[i-1][1]+gain*y_gain]#gain and its direction
-                        res.append(point)
-                else:#y
-                    x_gain = x_tend/abs(x_tend)
-                    for k in range(1,a+1):
-                        gain = k*average_len - last_len
-                        point = [arr[i-1][0]+gain*x_gain,arr[i-1][1]]
-                        res.append(point)
-                last_len = b # in next iteration, last_ is the remainder
-            elif a ==0:#when a =0, the target point are not on this edge, last_ equals to current_
-                last_len = current_len
-        return res
-    def find_len(self,arr):
-        arr_len = []
-        for i in range(1,len(arr)):
-            x = arr[i][0]
-            x0 = arr[i-1][0]
-            if x == x0:
-                leng = abs(arr[i][1]-arr[i-1][1])
-            else:
-                leng = abs(x-x0)
-            arr_len.append(leng)
-        arr_len.append(abs(arr[-1][0] - arr[0][0]))
-        return arr_len+[arr_len[0]] #put the first on the last to do iteration(help we judge the last edge)
 
 
 if __name__ == "__main__":
