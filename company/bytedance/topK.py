@@ -1,5 +1,6 @@
 import heapq
 
+"""python自带的排序算法比最小堆速度快，只不过最小堆节约内存"""
 
 class TopK(object):
     def __init__(self, array, capacity, top_type='max'):
