@@ -10,6 +10,17 @@
 
 def insertion_sort(nums):
     for i in range(1, len(nums)):
+        temp = nums[i]  # temp为要插入已排序部分的值
+        j = i - 1
+        while j >= 0 and nums[j] > temp:
+            nums[j + 1] = nums[j]
+            j -= 1
+        nums[j + 1] = temp
+
+
+# 对数组部分进行插入排序
+def insertion_sort_sub(nums, left, right):
+    for i in range(left + 1, right + 1):
         temp = nums[i]
         j = i - 1
         while j >= 0 and nums[j] > temp:
