@@ -1,3 +1,5 @@
+import random
+
 from sort.insertion_sort import insertion_sort_sub
 
 
@@ -77,10 +79,10 @@ class QuickSortII(object):
 
 
 if __name__ == "__main__":
-    nums = [9,2,6,3,7,0,5]
-    QuickSortII().quick_sort(nums)
-    print(nums)
-
-    nums = [8,5,6,3,7,0,8]
-    QuickSortII().quick_sort(nums)
-    print(nums)
+    for i in range(10):
+        nums = random.choices(range(1, 100), k=10)
+        print('********************************')
+        print(nums)
+        QuickSortII().quick_sort(nums)
+        print(nums)
+        print('********************************')

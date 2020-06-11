@@ -7,10 +7,12 @@
 从头到尾依次扫描未排序序列，将扫描到的每个元素插入有序序列的适当位置。（如果待插入的元素与有序序列中的某个元素相等，则将待插入元素插入到相等元素的后面。）
 """
 
+import random
+
 
 def insertion_sort(nums):
     for i in range(1, len(nums)):
-        temp = nums[i]  # temp为要插入已排序部分的值
+        temp = nums[i]
         j = i - 1
         while j >= 0 and nums[j] > temp:
             nums[j + 1] = nums[j]
@@ -19,7 +21,11 @@ def insertion_sort(nums):
 
 
 # 对数组部分进行插入排序
-def insertion_sort_sub(nums, left, right):
+def insertion_sort_sub(nums, left=None, right=None):
+    if not left:
+        left = 0
+    if not right:
+        right = len(nums) - 1
     for i in range(left + 1, right + 1):
         temp = nums[i]
         j = i - 1
@@ -30,6 +36,10 @@ def insertion_sort_sub(nums, left, right):
 
 
 if __name__ == "__main__":
-    nums = [3,1,4,6,7,8,2,0]
-    insertion_sort(nums)
-    print(nums)
+    for i in range(10):
+        nums = random.choices(range(1, 100), k=10)
+        print('********************************')
+        print(nums)
+        insertion_sort(nums)
+        print(nums)
+        print('********************************')
