@@ -13,9 +13,9 @@ class QuickSortI(object):
     from https://www.geeksforgeeks.org/python-program-for-quicksort/
     """
     def quick_sort(self, array, left=None, right=None):
-        if not left:
+        if left is None:
             left = 0
-        if not right:
+        if right is None:
             right = len(array) - 1
         if left < right:
             pivot = self.partition(array, left, right)
@@ -23,12 +23,10 @@ class QuickSortI(object):
             self.quick_sort(array, pivot + 1, right)
 
     def partition(self, array, left, right):
-        # 从left-1开始很巧妙
-        #
         i = left - 1
+        pivot = array[right]
         for j in range(left, right):
-            # j左边的都是比array[right]大
-            if array[j] <= array[right]:
+            if array[j] < pivot: # 小于等于使左边的子数组都是小于等于pivot,用小于也是可以的
                 i += 1
                 swap(array, i, j)
         swap(array, i + 1, right)
@@ -42,47 +40,57 @@ class QuickSortII(object):
     详情见《数据结构与算法分析 c语言描述》
     """
     def quick_sort(self, array, left=None, right=None):
-        if not left:
+        if left is None:
             left = 0
-        if not right:
+        if right is None:
             right = len(array) - 1
         if left + 3 <= right:
-            pivot = self.medium3(array, left, right)
-            i, j = left, right - 2
-            while True:
-                i += 1 # 先加1,使不需要考虑特殊情况
-                while array[i] < pivot:
-                    i += 1
-                j -= 1
-                while array[j] > pivot:
-                    j -= 1
-                if i < j:
-                    swap(array, i, j)
-                else:
-                    break
-            swap(array, i, right - 1)
-            self.quick_sort(array, left, i - 1)
-            self.quick_sort(array, i + 1, right)
+            pivot_index = self.medium3_partion(array, left, right)
+            self.quick_sort(array, left, pivot_index - 1)
+            self.quick_sort(array, pivot_index + 1, right)
         else:
             insertion_sort_sub(array, left, right)
 
-    def medium3(self, array, left, right):
+    def medium3_partion(self, array, left, right):
         mid = left + (right - left) // 2
+        # 取中值的比较顺序必须使left-mid,left-right,mid-right,比较完left再比较其他值，不能是left-mid,mid-right,left-right，如24,29,22
         if array[left] > array[mid]:
             swap(array, left, mid)
-        if array[mid] > array[right]:
-            swap(array, mid, right)
         if array[left] > array[right]:
             swap(array, left, right)
+        if array[mid] > array[right]:
+            swap(array, mid, right)
         swap(array, mid, right - 1)
-        return array[right - 1]
+
+        pivot = array[right - 1]
+        i, j = left, right - 1  # 虽然array[i]已经是比pivot小了，但因为后面i要先加1，所以直接从i开始，不从i+1开始,j同理
+        while i < j:
+            i += 1  # 先加1,使不需要考虑特殊情况
+            while array[i] < pivot:
+                i += 1
+            j -= 1
+            while array[j] > pivot:
+                j -= 1
+            if i < j:  # 必须i < j才交换，因为i可能大于等于j
+                swap(array, i, j)
+        swap(array, i, right - 1)
+        return i
 
 
 if __name__ == "__main__":
-    for i in range(10):
+    for i in range(100):
         nums = random.choices(range(1, 100), k=10)
-        print('********************************')
         print(nums)
+        copy_nums = nums.copy()
         QuickSortII().quick_sort(nums)
+        assert(sorted(copy_nums) == nums)
         print(nums)
         print('********************************')
+
+    nums = [78, 4, 31, 1, 45, 67, 56, 56, 52, 56]
+    QuickSortII().quick_sort(nums)
+    print(nums)
+
+    nums = [24, 29, 93, 51, 63, 22, 11, 82, 72, 31]
+    QuickSortII().quick_sort(nums)
+    print(nums)

@@ -38,7 +38,6 @@ def insertion_sort_sub(nums, left=None, right=None):
 if __name__ == "__main__":
     for i in range(10):
         nums = random.choices(range(1, 100), k=10)
-        print('********************************')
         print(nums)
         insertion_sort(nums)
         print(nums)
