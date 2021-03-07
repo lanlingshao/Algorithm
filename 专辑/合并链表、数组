@@ -1,0 +1,22 @@
+#### [1、合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
+
+github地址：[**0088.MergeSortedArray**](https://github.com/lanlingshao/leetcode/blob/master/python/problems/0088.MergeSortedArray.py)
+
+#### 2、合并K个有序数组
+
+此题leetcode上面没有，是字节跳动面试的时候被问到的
+
+github地址：[**0088(1).MergeKSortedArray.**](https://github.com/lanlingshao/leetcode/blob/master/python/problems/0088(1).MergeKSortedArray.py)
+
+#### [3、合并区间](https://leetcode-cn.com/problems/merge-intervals/)
+
+github地址：[**0056.MergeIntervals**](https://github.com/lanlingshao/leetcode/blob/master/python/problems/0056.MergeIntervals.py)
+
+#### [4、合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+
+github地址：[**0021.MergeTwoSortedLists**](https://github.com/lanlingshao/leetcode/blob/master/python/problems/0021.MergeTwoSortedLists.py)
+
+#### [5、合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
+
+github地址：[**0023.MergekSortedLists**](https://github.com/lanlingshao/leetcode/blob/master/python/problems/0023.MergekSortedLists.py)
+
