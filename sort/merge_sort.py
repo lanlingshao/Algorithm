@@ -14,62 +14,60 @@
 """
 
 
-def merge_sort(nums):
-    if len(nums) > 1:
+class Solution:
+    def merge_sortII(self, nums):
+        if len(nums) == 1:
+            return nums
         mid = len(nums) // 2
-        left_half = nums[:mid]
+        left_half = nums[0:mid]
         right_half = nums[mid:]
+        return self.merge(self.merge_sortII(left_half), self.merge_sortII(right_half))
 
-        merge_sort(left_half)
-        merge_sort(right_half)
-
-        i, j, k = 0, 0, 0
-        while i < len(left_half) and j < len(right_half):
-            if left_half[i] < right_half[j]:
-                nums[k] = left_half[i]
+    def merge(self, nums1, nums2):
+        res = []
+        i, j = 0, 0
+        while i < len(nums1) and j < len(nums2):
+            if nums1[i] < nums2[j]:
+                res.append(nums1[i])
                 i += 1
             else:
-                nums[k] = right_half[j]
+                res.append(nums2[j])
                 j += 1
-            k += 1
-
-        while i < len(left_half):
-            nums[k] = left_half[i]
-            i += 1
-            k += 1
-
-        while j < len(right_half):
-            nums[k] = right_half[j]
-            j += 1
-            k += 1
-
-
-def merge_sortII(nums):
-    if len(nums) == 1:
-        return nums
-    mid = len(nums) // 2
-    left_half = nums[0:mid]
-    right_half = nums[mid:]
-    return merge(merge_sortII(left_half), merge_sortII(right_half))
-
-
-def merge(nums1, nums2):
-    res = []
-    i, j = 0, 0
-    while i < len(nums1) and j < len(nums2):
-        if nums1[i] < nums2[j]:
+        while i < len(nums1):
             res.append(nums1[i])
             i += 1
-        else:
+        while j < len(nums2):
             res.append(nums2[j])
             j += 1
-    while i < len(nums1):
-        res.append(nums1[i])
-        i += 1
-    while j < len(nums2):
-        res.append(nums2[j])
-        j += 1
-    return res
+        return res
+
+
+# Solution1相对于Solution变成了对nums原地排序，只是多了temp_right_sub_nums占用的辅助空间，但是temp_right_sub_nums最多也就占用len(nums) / 2长度的空间
+class Solution1:
+    def merge_sort(self, left, right, nums):
+        if left < right:
+            mid = left + (right - left) // 2
+            self.merge_sort(left, mid, nums)
+            self.merge_sort(mid + 1, right, nums)
+            self.merge(left, mid, right, nums)
+
+    def merge(self, left, mid, right, nums):
+        temp_right_sub_nums = []
+        for i in range(mid + 1, right + 1):
+            temp_right_sub_nums.append(nums[i])
+        i, j, k = mid, len(temp_right_sub_nums) - 1, right
+        while i >= left and j >= 0:
+            if nums[i] > temp_right_sub_nums[j]:
+                nums[k] = nums[i]
+                i -= 1
+            else:
+                nums[k] = temp_right_sub_nums.pop()
+                j -= 1
+            k -= 1
+        while j >= 0:
+            nums[k] = temp_right_sub_nums.pop()
+            j -= 1
+            k -= 1
 
 
 if __name__ == "__main__":
