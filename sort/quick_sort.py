@@ -7,11 +7,12 @@ def swap(array, i, j):
     array[i], array[j] = array[j], array[i]
 
 
-class QuickSortI(object):
-    """
-    选取最右边的数作为枢纽，如果最右边数是最大的，就是最坏的情况, 没法把数组分别两部分
-    from https://www.geeksforgeeks.org/python-program-for-quicksort/
-    """
+"""
+选取最右边的数作为枢纽，如果最右边数是最大的，就是最坏的情况, 没法把数组分别两部分
+from https://www.geeksforgeeks.org/python-program-for-quicksort/
+跟《算法导论》的伪代码差不多
+"""
+class Solution(object):
     def quick_sort(self, array, left=None, right=None):
         if left is None:
             left = 0
@@ -33,7 +34,7 @@ class QuickSortI(object):
         return i + 1
 
 
-class QuickSortII(object):
+class Solution1(object):
     """
     三值中值分割法(消除了预排序输入的最坏情况)
     小数组用插入排序比快排更好,可以节约15%时间
@@ -77,20 +78,54 @@ class QuickSortII(object):
         return i
 
 
+# 来自《算法第四版》解法
+class Solution2:
+    def quick_sort(self, array, left=None, right=None):
+        if left is None:
+            left = 0
+        if right is None:
+            right = len(array) - 1
+        if left >= right:
+            return
+        pivot = self.partion(array, left, right)
+        self.quick_sort(array, left, pivot - 1)
+        self.quick_sort(array, pivot + 1, right)
+
+    def partion(self, array, left, right):
+        i = left + 1
+        j = right
+        pivot = array[left]
+        while True:
+            # 不是i < j
+            while i < right and array[i] < pivot:
+                i += 1
+            # 不是j > i
+            while j > left and array[j] > pivot:
+                j -= 1
+            if i >= j:
+                break
+            swap(array, i, j)
+            i += 1
+            j -= 1
+        # 返回j这个很巧妙
+        swap(array, left, j)
+        return j
+
+
+
 if __name__ == "__main__":
-    for i in range(100):
-        nums = random.choices(range(1, 100), k=10)
+    s = Solution2
+    nums = list(range(0,10))
+    for i in range(10):
+        random.shuffle(nums)
         print(nums)
-        copy_nums = nums.copy()
-        QuickSortII().quick_sort(nums)
-        assert(sorted(copy_nums) == nums)
+        s().quick_sort(nums)
         print(nums)
-        print('********************************')
+        print('*****************************')
 
-    nums = [78, 4, 31, 1, 45, 67, 56, 56, 52, 56]
-    QuickSortII().quick_sort(nums)
+    nums = [5,4,6,8,0,3,1,2,9,7]
+    s().quick_sort(nums)
     print(nums)
 
-    nums = [24, 29, 93, 51, 63, 22, 11, 82, 72, 31]
-    QuickSortII().quick_sort(nums)
-    print(nums)
+
+
