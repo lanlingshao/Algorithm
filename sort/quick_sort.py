@@ -7,12 +7,100 @@ def swap(array, i, j):
     array[i], array[j] = array[j], array[i]
 
 
-"""
-选取最右边的数作为枢纽，如果最右边数是最大的，就是最坏的情况, 没法把数组分别两部分
-from https://www.geeksforgeeks.org/python-program-for-quicksort/
-跟《算法导论》的伪代码差不多
-"""
-class Solution(object):
+"""快排不是稳定的"""
+
+
+# 来自《算法第四版》2.3.1 P184页解法
+class Solution:
+    def quick_sort(self, array, left=None, right=None):
+        if left is None:
+            left = 0
+        if right is None:
+            right = len(array) - 1
+        if left >= right:
+            return
+        pivot = self.partion(array, left, right)
+        self.quick_sort(array, left, pivot - 1)
+        self.quick_sort(array, pivot + 1, right)
+
+    def partion(self, array, left, right):
+        i = left + 1
+        j = right
+        pivot_value = array[left]
+        while True:
+            # 不是i < j
+            while i < right and array[i] < pivot_value:
+                i += 1
+            # 不是j > i
+            while j > left and array[j] > pivot_value:
+                j -= 1
+            if i >= j:
+                break
+            swap(array, i, j)
+            i += 1
+            j -= 1
+        # 返回j这个很巧妙, 为什么用j呢？j是左子数组的最右边的点，j的值肯定是比pivot小的，i就可能比pivot大，
+        # 所以让j和pivot交换位置，不会导致比piovt大的数值换到左半部分
+        swap(array, left, j)
+        return j
+
+
+class Solution1:
+    """
+    三值中值分割法(消除了预排序输入的最坏情况)
+    小数组用插入排序比快排更好,可以节约15%时间
+    详情见《数据结构与算法分析 c语言描述》
+    """
+    def quick_sort(self, array, left=None, right=None):
+        if left is None:
+            left = 0
+        if right is None:
+            right = len(array) - 1
+        if left >= right:
+            return
+        if left + 3 < right:
+            pivot = self.medium3_partion(array, left, right)
+            self.quick_sort(array, left, pivot - 1)
+            self.quick_sort(array, pivot + 1, right)
+        else:
+            insertion_sort_sub(array, left, right)
+
+    def medium3_partion(self, array, left, right):
+        # 先把最大值放到最右边，再将左值跟中值比较，将中值放在最左边
+        mid = left + (right - left) // 2
+        if array[right] < array[mid]:
+            swap(array, right, mid)
+        if array[right] < array[left]:
+            swap(array, right, left)
+        if array[left] < array[mid]:
+            swap(array, left, mid)
+
+        i = left + 1
+        j = right
+        pivot_value = array[left]
+        while True:
+            # 不是i < j
+            while i < right and array[i] < pivot_value:
+                i += 1
+            # 不是j > i
+            while j > left and array[j] > pivot_value:
+                j -= 1
+            if i >= j:
+                break
+            swap(array, i, j)
+            i += 1
+            j -= 1
+        # 返回j这个很巧妙, 为什么用j呢？j是左子数组的最右边的点，j的值肯定是比pivot小的，i就可能比pivot大，
+        # 所以让j和pivot交换位置，不会导致比piovt大的数值换到左半部分
+        swap(array, left, j)
+        return j
+
+
+class Solution2:
+    """
+    选取最右边的数作为枢纽，如果最右边数是最大的，就是最坏的情况, 没法把数组分别两部分
+    跟《算法导论》的伪代码差不多, 这个方法虽然代码看起来简短，实际上却不容易想出来，也不容易写出来
+    """
     def quick_sort(self, array, left=None, right=None):
         if left is None:
             left = 0
@@ -34,87 +122,8 @@ class Solution(object):
         return i + 1
 
 
-class Solution1(object):
-    """
-    三值中值分割法(消除了预排序输入的最坏情况)
-    小数组用插入排序比快排更好,可以节约15%时间
-    详情见《数据结构与算法分析 c语言描述》
-    """
-    def quick_sort(self, array, left=None, right=None):
-        if left is None:
-            left = 0
-        if right is None:
-            right = len(array) - 1
-        if left + 3 <= right:
-            pivot_index = self.medium3_partion(array, left, right)
-            self.quick_sort(array, left, pivot_index - 1)
-            self.quick_sort(array, pivot_index + 1, right)
-        else:
-            insertion_sort_sub(array, left, right)
-
-    def medium3_partion(self, array, left, right):
-        mid = left + (right - left) // 2
-        # 取中值的比较顺序必须使left-mid,left-right,mid-right,比较完left再比较其他值，不能是left-mid,mid-right,left-right，如24,29,22
-        if array[left] > array[mid]:
-            swap(array, left, mid)
-        if array[left] > array[right]:
-            swap(array, left, right)
-        if array[mid] > array[right]:
-            swap(array, mid, right)
-        swap(array, mid, right - 1)
-
-        pivot = array[right - 1]
-        i, j = left, right - 1  # 虽然array[i]已经是比pivot小了，但因为后面i要先加1，所以直接从i开始，不从i+1开始,j同理
-        while i < j:
-            i += 1  # 先加1,使不需要考虑特殊情况
-            while array[i] < pivot:
-                i += 1
-            j -= 1
-            while array[j] > pivot:
-                j -= 1
-            if i < j:  # 必须i < j才交换，因为i可能大于等于j
-                swap(array, i, j)
-        swap(array, i, right - 1)
-        return i
-
-
-# 来自《算法第四版》解法
-class Solution2:
-    def quick_sort(self, array, left=None, right=None):
-        if left is None:
-            left = 0
-        if right is None:
-            right = len(array) - 1
-        if left >= right:
-            return
-        pivot = self.partion(array, left, right)
-        self.quick_sort(array, left, pivot - 1)
-        self.quick_sort(array, pivot + 1, right)
-
-    def partion(self, array, left, right):
-        i = left + 1
-        j = right
-        pivot = array[left]
-        while True:
-            # 不是i < j
-            while i < right and array[i] < pivot:
-                i += 1
-            # 不是j > i
-            while j > left and array[j] > pivot:
-                j -= 1
-            if i >= j:
-                break
-            swap(array, i, j)
-            i += 1
-            j -= 1
-        # 返回j这个很巧妙
-        swap(array, left, j)
-        return j
-
-
-
 if __name__ == "__main__":
-    s = Solution2
+    s = Solution1
     nums = list(range(0,10))
     for i in range(10):
         random.shuffle(nums)
@@ -127,5 +136,8 @@ if __name__ == "__main__":
     s().quick_sort(nums)
     print(nums)
 
+    nums = [5,4,6,8,0,5,1,2,9,7]
+    s().quick_sort(nums)
+    print(nums)
 
 
