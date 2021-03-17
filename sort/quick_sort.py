@@ -112,18 +112,19 @@ class Solution2:
             self.quick_sort(array, pivot + 1, right)
 
     def partition(self, array, left, right):
-        i = left - 1
-        pivot = array[right]
-        for j in range(left, right):
+        # 《算法导论》里面是右侧值作为枢纽值，所有代码有点不同
+        i = left
+        pivot = array[left]
+        for j in range(left + 1, right + 1):
             if array[j] < pivot: # 小于等于使左边的子数组都是小于等于pivot,用小于也是可以的
                 i += 1
                 swap(array, i, j)
-        swap(array, i + 1, right)
-        return i + 1
+        swap(array, i, left)
+        return i
 
 
 if __name__ == "__main__":
-    s = Solution
+    s = Solution2
     nums = list(range(0,10))
     for i in range(10):
         random.shuffle(nums)
