@@ -28,11 +28,11 @@ class Solution:
         j = right
         pivot_value = array[left]
         while True:
-            # 不是i < j
-            while i < right and array[i] < pivot_value:
+            # 不是i < j, array[i] <= pivot_value或者array[i] < pivot_value均可
+            while i < right and array[i] <= pivot_value:
                 i += 1
-            # 不是j > i
-            while j > left and array[j] > pivot_value:
+            # 不是j > i, array[j] >= pivot_value或者array[j] > pivot_value均可
+            while j > left and array[j] >= pivot_value:
                 j -= 1
             if i >= j:
                 break
@@ -80,10 +80,10 @@ class Solution1:
         pivot_value = array[left]
         while True:
             # 不是i < j
-            while i < right and array[i] < pivot_value:
+            while i < right and array[i] <= pivot_value:
                 i += 1
             # 不是j > i
-            while j > left and array[j] > pivot_value:
+            while j > left and array[j] >= pivot_value:
                 j -= 1
             if i >= j:
                 break
@@ -123,7 +123,7 @@ class Solution2:
 
 
 if __name__ == "__main__":
-    s = Solution1
+    s = Solution
     nums = list(range(0,10))
     for i in range(10):
         random.shuffle(nums)
