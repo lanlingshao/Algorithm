@@ -10,6 +10,7 @@
 import random
 
 
+# 插入排序是稳定的，时间复杂度最好是O(n)(当数组已经是排序的时候), 最差时O(n^2)
 def insertion_sort(nums):
     for i in range(1, len(nums)):
         temp = nums[i]

@@ -17,36 +17,7 @@
 """
 
 
-# 递归法，拷贝数组再合并
-class Solution:
-    def merge_sort(self, nums):
-        if len(nums) == 1:
-            return nums
-        mid = len(nums) // 2
-        left_half = nums[0:mid]
-        right_half = nums[mid:]
-        return self.merge(self.merge_sort(left_half), self.merge_sort(right_half))
-
-    def merge(self, nums1, nums2):
-        res = []
-        i, j = 0, 0
-        while i < len(nums1) and j < len(nums2):
-            if nums1[i] < nums2[j]:
-                res.append(nums1[i])
-                i += 1
-            else:
-                res.append(nums2[j])
-                j += 1
-        while i < len(nums1):
-            res.append(nums1[i])
-            i += 1
-        while j < len(nums2):
-            res.append(nums2[j])
-            j += 1
-        return res
-
-
-# 递归法，原地合并, Solution1相对于Solution变成了对nums原地排序，只是多了temp_right_sub_nums占用的辅助空间，
+# 递归法，原地合并, 只是多了temp_right_sub_nums占用的辅助空间，
 # 但是temp_right_sub_nums最多也就占用len(nums) / 2长度的空间
 class Solution1:
     def merge_sort(self, left, right, nums):
@@ -54,7 +25,7 @@ class Solution1:
             mid = left + (right - left) // 2
             self.merge_sort(left, mid, nums)
             self.merge_sort(mid + 1, right, nums)
-            # 增加左边的比右边的小，不需要对两边的进行排序了
+            # 如果中间值比右边的小，不需要对两边的进行排序了
             if nums[mid] <= nums[mid + 1]:
                 return
             self.merge(left, mid, right, nums)

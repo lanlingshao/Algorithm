@@ -12,17 +12,28 @@
 持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。
 """
 
+# 冒泡排序最好的时间复杂度可以降到O(n)，但是要更改代码加一个标志位
 
-def bubble_sort(nums):
-    for i in range(0, len(nums) - 1):
-        for j in range(0, len(nums) - i - 1):
-            if nums[j] > nums[j+1]:
-                print(j, j+1)
-                nums[j], nums[j+1] = nums[j+1], nums[j]
+
+class Solution:
+    def bubble_sort(self, nums):
+        flag = 1
+        for i in range(0, len(nums) - 1):
+            for j in range(0, len(nums) - i - 1):
+                if nums[j] > nums[j+1]:
+                    nums[j], nums[j+1] = nums[j+1], nums[j]
+                    flag = 0
+                # 表示数字已经有序
+                if flag == 1:
+                    break
 
 
 if __name__ == "__main__":
+    s = Solution
     nums = [3,1,4,6,7,8,2,0]
-    bubble_sort(nums)
+    s().bubble_sort(nums)
+    print(nums)
+    nums = [0,1,2,3,4,5,6,7]
+    s().bubble_sort(nums)
     print(nums)
 

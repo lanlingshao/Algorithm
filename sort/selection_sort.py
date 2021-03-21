@@ -7,6 +7,7 @@
 重复第二步，直到所有元素均排序完毕。
 """
 
+# 选择排序不稳定  比如数字[8, 8, 7], 第一个数字8会被交换后第二个8右边来
 
 def selection_sort(nums):
     for i in range(0, len(nums) - 1):
